@@ -15,10 +15,10 @@ Mercado inicial: Argentina. Otros países quedan para más adelante.
 
 ## 2. Contexto personal (completar antes de empezar)
 
-- Horas semanales disponibles: ___
-- Nivel técnico: ___ (¿puedo leer y modificar código TypeScript sin ayuda?)
-- Situación fiscal: ___ (monotributo categoría __ / otra)
-- Rubros donde tengo contactos directos: ___
+- Horas semanales disponibles: 10 a 20 (desarrollo + ventas)
+- Nivel técnico: no programo. Todo el mantenimiento debe poder hacerse desde paneles y runbooks, o por un freelancer.
+- Situación fiscal: monotributo (categoría: ___)
+- Rubros donde tengo contactos directos: comercio minorista, gastronomía, servicios/oficios, salud/estética
 - Conocimiento de dominio o ventajas propias: ___
 - Plazo objetivo para el primer cliente pago: ___
 - Agent Core: ___ (explicar qué es o eliminar esta línea)
