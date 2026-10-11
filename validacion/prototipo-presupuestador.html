@@ -1,0 +1,315 @@
+<title>Presupuestá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: app de celular centrada; en escritorio, un marco de teléfono sobre fondo de plano técnico. */
+:root{
+  --bg:#E9ECEF; --frame:#F7F8FA; --surface:#FFFFFF; --ink:#16233A; --muted:#5B6678; --line:#D5DAE1;
+  --accent:#F2B705; --accent-ink:#1B1600; --brand:#1F3A5F; --brand-ink:#FFFFFF;
+  --ok:#1E7B4A; --ok-bg:#E3F3EA; --warn:#8A5A00; --warn-bg:#FFF3D1; --bad:#A3282B; --bad-bg:#FBE4E4; --info:#2457A6; --info-bg:#E4ECF9;
+  --paper:#FFFFFF; --paper-line:#E3E6EB;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1420; --frame:#121B2A; --surface:#1A2536; --ink:#E7ECF3; --muted:#9AA6B8; --line:#2C3A50;
+  --accent:#F2B705; --accent-ink:#1B1600; --brand:#8DB3E8; --brand-ink:#0D1420;
+  --ok:#6FD39C; --ok-bg:#163326; --warn:#F2C65A; --warn-bg:#352A0E; --bad:#F08A8C; --bad-bg:#3A1A1C; --info:#93B6F0; --info-bg:#1A2A45;
+  --paper:#F4F5F7; --paper-line:#DADDE3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1420; --frame:#121B2A; --surface:#1A2536; --ink:#E7ECF3; --muted:#9AA6B8; --line:#2C3A50;
+  --accent:#F2B705; --accent-ink:#1B1600; --brand:#8DB3E8; --brand-ink:#0D1420;
+  --ok:#6FD39C; --ok-bg:#163326; --warn:#F2C65A; --warn-bg:#352A0E; --bad:#F08A8C; --bad-bg:#3A1A1C; --info:#93B6F0; --info-bg:#1A2A45;
+  --paper:#F4F5F7; --paper-line:#DADDE3; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:28px 28px;background-position:-1px -1px}
+.wrap{max-width:430px;margin:0 auto;min-height:100%;background:var(--frame);display:flex;flex-direction:column;position:relative;box-shadow:0 0 0 1px var(--line)}
+@media (min-width:600px){.wrap{margin-block:24px;min-height:calc(100% - 48px);border-radius:22px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 20px 50px rgba(10,20,40,.18)}}
+.proto{background:var(--accent);color:var(--accent-ink);font-size:12px;padding:6px 16px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.proto button{background:none;border:1px solid currentColor;border-radius:999px;font:inherit;color:inherit;padding:2px 10px;cursor:pointer}
+header.top{padding:14px 16px 10px;display:flex;align-items:center;gap:12px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{width:40px;height:40px;border-radius:9px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:18px;flex:none}
+.top h1{font-family:var(--display);font-weight:600;font-size:21px;margin:0;line-height:1.1;text-wrap:balance}
+.top p{margin:0;color:var(--muted);font-size:13px}
+.back{background:none;border:0;color:var(--ink);font:600 15px var(--body);padding:6px 4px;cursor:pointer}
+main{flex:1;padding:16px;display:flex;flex-direction:column;gap:14px;padding-bottom:96px}
+h2{font-family:var(--display);font-weight:600;font-size:19px;margin:4px 0 0;letter-spacing:.2px}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.alert{background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px}
+.alert strong{color:var(--warn);font-family:var(--display);font-size:18px;font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat .n{font-family:var(--display);font-weight:700;font-size:26px;font-variant-numeric:tabular-nums}
+.list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font:inherit;color:inherit;width:100%}
+.row:last-child{border-bottom:0}
+.row:hover{background:color-mix(in srgb,var(--brand) 5%,transparent)}
+.row .who{font-weight:600;min-width:0}
+.row .amt{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.row .meta{color:var(--muted);font-size:13px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;justify-self:end}
+.st-Borrador{background:var(--line);color:var(--ink)} .st-Enviado{background:var(--info-bg);color:var(--info)}
+.st-Visto{background:var(--warn-bg);color:var(--warn)} .st-Aceptado{background:var(--ok-bg);color:var(--ok)} .st-Rechazado{background:var(--bad-bg);color:var(--bad)}
+.btn{appearance:none;border:0;border-radius:9px;padding:12px 16px;font:600 15px var(--body);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.dark{background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.wa{background:#1F8F4E;color:#fff}
+.btn.block{width:100%}
+.btn:focus-visible,.row:focus-visible,input:focus-visible,select:focus-visible,nav button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btns{display:flex;flex-direction:column;gap:8px}
+nav.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:10}
+@media (min-width:600px){nav.tabs{position:absolute}}
+nav.tabs button{background:none;border:0;font:500 12px var(--body);color:var(--muted);padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-radius:8px}
+nav.tabs button[aria-current="page"]{color:var(--ink);font-weight:600}
+nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav.tabs .plus{background:var(--accent);color:var(--accent-ink);border-radius:999px;width:38px;height:28px;display:grid;place-items:center}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted);font-weight:500}
+input,select{font:16px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+.item{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.item:last-child{border-bottom:0}
+.item .nm{font-weight:600;min-width:0}
+.item .pu{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.item .sub{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.qty{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;justify-self:end}
+.qty button{background:var(--frame);border:0;width:34px;height:32px;font:600 18px var(--body);color:var(--ink);cursor:pointer}
+.qty span{min-width:38px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+.tot{display:grid;grid-template-columns:1fr auto;gap:6px;font-variant-numeric:tabular-nums}
+.tot .big{font-family:var(--display);font-size:26px;font-weight:700}
+/* Documento tipo papel */
+.paper{background:var(--paper);color:#16233A;border-radius:4px;padding:20px 18px;box-shadow:0 1px 0 var(--paper-line),0 8px 24px rgba(10,20,40,.12);font-size:13.5px;display:flex;flex-direction:column;gap:14px}
+.paper .ph{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border-bottom:2px solid #16233A;padding-bottom:12px}
+.paper .ph .logo{background:#1F3A5F;color:#fff}
+.paper .biz{display:flex;gap:10px;align-items:center;min-width:0}
+.paper .biz b{font-family:var(--display);font-size:18px;display:block;line-height:1.1}
+.paper .num{text-align:right;font-family:var(--display);font-size:15px;line-height:1.2;flex:none}
+.paper .num b{font-size:20px;display:block}
+.paper table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.paper th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#5B6678;text-align:left;padding:6px 4px;border-bottom:1px solid #DADDE3}
+.paper td{padding:7px 4px;border-bottom:1px solid #EEF0F3;vertical-align:top}
+.paper .r{text-align:right;white-space:nowrap}
+.paper .ptot{display:grid;grid-template-columns:1fr auto;gap:4px 16px;margin-left:auto;min-width:60%;font-variant-numeric:tabular-nums}
+.paper .ptot .g{font-family:var(--display);font-weight:700;font-size:20px;border-top:2px solid #16233A;padding-top:4px}
+.paper .cond{color:#5B6678;font-size:12px;border-top:1px solid #DADDE3;padding-top:10px}
+.stamp{align-self:flex-start;border:2px solid #1E7B4A;color:#1E7B4A;font-family:var(--display);font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:4px;transform:rotate(-3deg)}
+.sheet-bg{position:fixed;inset:0;background:rgba(8,14,24,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:430px;border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;max-height:85vh;overflow:auto}
+.bubble{background:#DCF8C6;color:#111;border-radius:10px 10px 2px 10px;padding:10px 12px;align-self:flex-end;max-width:90%;white-space:pre-wrap;font-size:14px}
+.chat{background:#ECE5DD;border-radius:10px;padding:12px;display:flex;flex-direction:column}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--frame);padding:10px 16px;border-radius:999px;font-weight:600;z-index:30;font-size:14px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{background:var(--surface);border:0;border-right:1px solid var(--line);font:500 14px var(--body);color:var(--ink);padding:9px 4px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);font-weight:600}
+.cmp{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.cmp b{color:var(--ok)}
+.muted{color:var(--muted)}
+.client-top{background:var(--brand);color:var(--brand-ink);padding:12px 16px;font-size:13px;display:flex;gap:8px;align-items:center}
+.small{font-size:13px}
+@media (prefers-reduced-motion:no-preference){.toast{animation:pop .2s ease-out}@keyframes pop{from{transform:translate(-50%,8px);opacity:.4}}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+const fmt=n=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Math.round(n));
+const hoy=new Date(2026,9,11);
+const diasAtras=d=>{const x=new Date(hoy);x.setDate(x.getDate()-d);return x};
+const fecha=d=>d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
+const hace=d=>{const n=Math.round((hoy-d)/864e5);return n===0?'hoy':n===1?'ayer':`hace ${n} días`};
+const iniciales=s=>s.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'P';
+
+function semilla(){
+  const cat=[
+    {id:1,nm:'Boca de luz (mano de obra)',u:'boca',p:18000,t:'Mano de obra'},
+    {id:2,nm:'Tomacorriente doble (mano de obra)',u:'boca',p:16000,t:'Mano de obra'},
+    {id:3,nm:'Tablero seccional 12 módulos',u:'u.',p:95000,t:'Mano de obra'},
+    {id:4,nm:'Cable unipolar 2,5 mm² (rollo 100 m)',u:'rollo',p:68000,t:'Materiales'},
+    {id:5,nm:'Caño corrugado 3/4" (rollo 25 m)',u:'rollo',p:14500,t:'Materiales'},
+    {id:6,nm:'Térmica bipolar 20 A',u:'u.',p:21000,t:'Materiales'},
+    {id:7,nm:'Disyuntor diferencial 40 A',u:'u.',p:58000,t:'Materiales'},
+    {id:8,nm:'Visita técnica y diagnóstico',u:'u.',p:25000,t:'Mano de obra'},
+  ];
+  const it=(id,q)=>({id,q});
+  const pres=[
+    {n:48,cli:'Laura Giménez',tel:'11 4000-1111',items:[it(1,6),it(2,4),it(4,1),it(5,2)],desc:0,est:'Visto',f:diasAtras(5),visto:diasAtras(3)},
+    {n:47,cli:'Consorcio Rivadavia 2140',tel:'11 4000-2222',items:[it(3,1),it(6,4),it(7,1)],desc:5,est:'Visto',f:diasAtras(6),visto:diasAtras(4)},
+    {n:46,cli:'Diego Ferreyra',tel:'11 4000-3333',items:[it(8,1),it(1,2)],desc:0,est:'Enviado',f:diasAtras(2)},
+    {n:45,cli:'Panadería La Espiga',tel:'11 4000-4444',items:[it(3,1),it(7,1),it(4,2)],desc:10,est:'Aceptado',f:diasAtras(9),visto:diasAtras(8)},
+    {n:44,cli:'Sofía Benítez',tel:'11 4000-5555',items:[it(2,3)],desc:0,est:'Rechazado',f:diasAtras(12),visto:diasAtras(11)},
+    {n:43,cli:'Marcos Ledesma',tel:'11 4000-6666',items:[it(1,10),it(4,2),it(5,3),it(6,2)],desc:0,est:'Aceptado',f:diasAtras(15),visto:diasAtras(14)},
+  ];
+  return {neg:{nombre:'Electricidad Romero',rubro:'Instalaciones eléctricas',tel:'11 5555-0000',validez:15,pago:'50% de anticipo, saldo al terminar.'},cat,pres,borrador:null,vista:'lista',sel:null,modo:'comercio'};
+}
+let S=semilla();
+const app=document.getElementById('app');
+const prod=id=>S.cat.find(c=>c.id===id);
+const calc=p=>{const sub=p.items.reduce((a,i)=>a+prod(i.id).p*i.q,0);const d=sub*(p.desc||0)/100;return {sub,d,tot:sub-d}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let toastT;
+function toast(m){document.querySelector('.toast')?.remove();const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),2200)}
+function go(v,extra){Object.assign(S,{vista:v},extra||{});render();window.scrollTo(0,0)}
+
+const ico={
+  list:'<svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+  plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  box:'<svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg>',
+  shop:'<svg viewBox="0 0 24 24"><path d="M4 9l1-5h14l1 5M4 9h16v11H4zM9 20v-6h6v6"/></svg>'
+};
+function nav(){const t=[['lista','Presupuestos',ico.list],['nuevo','Nuevo',ico.plus],['catalogo','Precios',ico.box],['negocio','Mi negocio',ico.shop]];
+  return `<nav class="tabs" aria-label="Secciones">${t.map(([v,l,i])=>`<button data-go="${v}" ${S.vista===v?'aria-current="page"':''}>${v==='nuevo'?`<span class="plus">${i}</span>`:i}${l}</button>`).join('')}</nav>`}
+function proto(){return `<div class="proto"><span>Prototipo de demostración · datos de ejemplo</span><button data-act="reset">Reiniciar</button></div>`}
+function top(title,sub,back){return `<header class="top">${back?`<button class="back" data-go="${back}" aria-label="Volver">←</button>`:`<div class="logo">${esc(iniciales(S.neg.nombre))}</div>`}<div style="min-width:0"><h1>${esc(title)}</h1>${sub?`<p>${esc(sub)}</p>`:''}</div></header>`}
+
+function vLista(){
+  const pend=S.pres.filter(p=>p.est==='Visto');
+  const abiertos=S.pres.filter(p=>['Enviado','Visto'].includes(p.est));
+  const acept=S.pres.filter(p=>p.est==='Aceptado');
+  const sum=a=>a.reduce((x,p)=>x+calc(p).tot,0);
+  return proto()+top(S.neg.nombre,S.neg.rubro)+`<main>
+  ${pend.length?`<section class="alert"><strong>${pend.length===1?'1 cliente vio tu presupuesto y no contestó':pend.length+' clientes vieron tu presupuesto y no contestaron'}</strong>
+   <span class="small">${pend.map(p=>esc(p.cli.split(' ')[0])).join(' y ')} ${pend.length===1?'lo abrió':'lo abrieron'} hace más de 2 días. Es el mejor momento para escribirles.</span>
+   <button class="btn primary" data-act="recordar">Escribirles ahora</button></section>`:''}
+  <div class="stats">
+   <div class="card stat"><div class="lbl">En juego</div><div class="n">${fmt(sum(abiertos))}</div><div class="muted small">${abiertos.length} presupuestos abiertos</div></div>
+   <div class="card stat"><div class="lbl">Aceptados este mes</div><div class="n">${fmt(sum(acept))}</div><div class="muted small">${acept.length} de ${S.pres.filter(p=>p.est!=='Borrador').length} enviados</div></div>
+  </div>
+  <h2>Presupuestos</h2>
+  <div class="list">${S.pres.map(p=>`<button class="row" data-ver="${p.n}">
+    <span class="who">N.º ${String(p.n).padStart(4,'0')} · ${esc(p.cli)}</span><span class="amt">${fmt(calc(p).tot)}</span>
+    <span class="meta">${p.visto&&p.est==='Visto'?'Visto '+hace(p.visto):p.est==='Enviado'?'Enviado '+hace(p.f)+' · no lo abrió':'Enviado '+fecha(p.f)}</span><span class="pill st-${p.est}">${p.est}</span></button>`).join('')}</div>
+  </main>`+nav();
+}
+
+function nuevoBorrador(){return {n:Math.max(...S.pres.map(p=>p.n))+1,cli:'',tel:'',items:[{id:1,q:4},{id:4,q:1}],desc:0,est:'Borrador',f:new Date(hoy)}}
+function vNuevo(){
+  const b=S.borrador||(S.borrador=nuevoBorrador());const c=calc(b);
+  return proto()+top('Nuevo presupuesto','N.º '+String(b.n).padStart(4,'0'))+`<main>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px">
+   <label class="f">Cliente<input id="cli" value="${esc(b.cli)}" placeholder="Ej.: Laura Giménez" autocomplete="off"></label>
+   <label class="f">WhatsApp del cliente<input id="tel" value="${esc(b.tel)}" placeholder="Ej.: 11 4000-1111" inputmode="tel"></label>
+  </div>
+  <h2>Ítems</h2>
+  <div class="card">${b.items.length?b.items.map((i,k)=>{const pr=prod(i.id);return `<div class="item"><span class="nm">${esc(pr.nm)}</span><span class="qty"><button data-q="${k}" data-d="-1" aria-label="Restar">−</button><span>${i.q}</span><button data-q="${k}" data-d="1" aria-label="Sumar">+</button></span><span class="pu">${fmt(pr.p)} por ${pr.u}</span><span class="sub">${fmt(pr.p*i.q)}</span></div>`}).join(''):'<p class="muted">Todavía no agregaste ítems.</p>'}
+   <button class="btn ghost block" data-act="agregar" style="margin-top:10px">+ Agregar desde mis precios</button></div>
+  <div class="card tot">
+   <span>Subtotal</span><span>${fmt(c.sub)}</span>
+   <label for="desc">Descuento (%)</label><input id="desc" type="number" min="0" max="50" value="${b.desc}" style="width:80px;text-align:right">
+   ${b.desc?`<span class="muted">Descuento</span><span class="muted">− ${fmt(c.d)}</span>`:''}
+   <span class="big">Total</span><span class="big">${fmt(c.tot)}</span></div>
+  <button class="btn primary block" data-act="generar">Generar presupuesto</button>
+  </main>`+nav();
+}
+
+function doc(p){const c=calc(p);return `<article class="paper" aria-label="Presupuesto">
+  <div class="ph"><div class="biz"><div class="logo">${esc(iniciales(S.neg.nombre))}</div><div><b>${esc(S.neg.nombre)}</b><span style="color:#5B6678;font-size:12px">${esc(S.neg.rubro)} · Tel. ${esc(S.neg.tel)}</span></div></div>
+  <div class="num">PRESUPUESTO<b>N.º ${String(p.n).padStart(4,'0')}</b><span style="font-family:var(--body);font-size:12px;color:#5B6678">${fecha(p.f)}</span></div></div>
+  <div><span style="color:#5B6678;font-size:12px">Para</span><br><b>${esc(p.cli||'Cliente')}</b></div>
+  <div style="overflow-x:auto"><table><thead><tr><th>Detalle</th><th class="r">Cant.</th><th class="r">Importe</th></tr></thead><tbody>
+   ${p.items.map(i=>{const pr=prod(i.id);return `<tr><td>${esc(pr.nm)}<br><span style="color:#5B6678;font-size:12px">${fmt(pr.p)} por ${pr.u}</span></td><td class="r">${i.q}</td><td class="r">${fmt(pr.p*i.q)}</td></tr>`}).join('')}
+  </tbody></table></div>
+  <div class="ptot"><span>Subtotal</span><span class="r">${fmt(c.sub)}</span>${p.desc?`<span>Descuento ${p.desc}%</span><span class="r">− ${fmt(c.d)}</span>`:''}<span class="g">Total</span><span class="g r">${fmt(c.tot)}</span></div>
+  ${p.est==='Aceptado'?'<div class="stamp">ACEPTADO</div>':''}
+  <div class="cond">Validez: ${S.neg.validez} días desde la fecha de emisión. Forma de pago: ${esc(S.neg.pago)} Precios finales.</div>
+ </article>`}
+
+function vDetalle(){const p=S.pres.find(x=>x.n===S.sel);
+  return proto()+top('Presupuesto N.º '+String(p.n).padStart(4,'0'),p.cli,'lista')+`<main>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="pill st-${p.est}" style="justify-self:start">${p.est}</span><span class="muted small">${p.visto?'El cliente lo abrió '+hace(p.visto):p.est==='Borrador'?'Todavía no lo enviaste':'El cliente todavía no lo abrió'}</span></div>
+  ${doc(p)}
+  <div class="btns">
+   ${p.est!=='Aceptado'&&p.est!=='Rechazado'?`<button class="btn wa block" data-act="wa">${p.est==='Borrador'?'Enviar por WhatsApp':'Volver a escribirle por WhatsApp'}</button>`:''}
+   <button class="btn dark block" data-act="cliente">Ver lo que recibe el cliente</button>
+   <button class="btn ghost block" data-act="pdf">Descargar PDF</button>
+  </div></main>`+nav();
+}
+
+function vCliente(){const p=S.pres.find(x=>x.n===S.sel);
+  return `<div class="proto"><span>Así lo ve tu cliente en su celular</span><button data-act="volver-comercio">Volver a mi vista</button></div>
+  <div class="client-top"><span>Enlace seguro ·</span><span>presupuesta.ar/p/${(p.n*7919).toString(36)}</span></div>
+  <main style="padding-bottom:24px">
+  ${p.est==='Aceptado'?`<div class="card" style="border-color:var(--ok);background:var(--ok-bg)"><b style="color:var(--ok)">Aceptaste este presupuesto.</b><br><span class="small">${esc(S.neg.nombre)} ya recibió el aviso y se va a comunicar para coordinar.</span></div>`:''}
+  ${doc(p)}
+  ${p.est!=='Aceptado'?`<div class="btns"><button class="btn primary block" data-act="aceptar">Aceptar presupuesto</button><button class="btn ghost block" data-act="consultar">Tengo una consulta</button></div>`:''}
+  </main>`;
+}
+
+function vCatalogo(){const f=S.filtro||'Todos';const pct=S.pct??10;
+  const afecta=S.cat.filter(c=>f==='Todos'||c.t===f);
+  return proto()+top('Mis precios',S.cat.length+' ítems cargados')+`<main>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px">
+   <h2 style="margin:0">Actualizar precios</h2>
+   <span class="small muted">Aumentó el material: actualizá todo de una vez. Los presupuestos ya enviados no cambian.</span>
+   <div class="seg" role="group" aria-label="Qué actualizar">${['Todos','Materiales','Mano de obra'].map(x=>`<button data-filtro="${x}" aria-pressed="${x===f}">${x}</button>`).join('')}</div>
+   <label class="f">Aumento (%)<input id="pct" type="number" min="1" max="100" value="${pct}"></label>
+   <div class="cmp">${afecta.slice(0,2).map(c=>`${esc(c.nm)}: ${fmt(c.p)} → <b>${fmt(c.p*(1+pct/100))}</b>`).join('<br>')}${afecta.length>2?`<br>y ${afecta.length-2} ítems más`:''}</div>
+   <button class="btn primary block" data-act="aumentar">Aplicar ${pct}% a ${afecta.length} ítems</button>
+  </div>
+  <div class="list">${S.cat.map(c=>`<div class="row" style="cursor:default"><span class="who">${esc(c.nm)}</span><span class="amt">${fmt(c.p)}</span><span class="meta">${c.t} · por ${c.u}</span><span></span></div>`).join('')}</div>
+  </main>`+nav();
+}
+
+function vNegocio(){const n=S.neg;
+  return proto()+top('Mi negocio','Estos datos salen en cada presupuesto')+`<main>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px">
+   <div style="display:flex;gap:12px;align-items:center"><div class="logo" style="width:56px;height:56px;font-size:24px">${esc(iniciales(n.nombre))}</div><span class="small muted">En la versión real podés subir tu logo.</span></div>
+   <label class="f">Nombre del negocio<input id="n-nombre" value="${esc(n.nombre)}"></label>
+   <label class="f">Rubro<input id="n-rubro" value="${esc(n.rubro)}"></label>
+   <label class="f">Teléfono<input id="n-tel" value="${esc(n.tel)}" inputmode="tel"></label>
+   <label class="f">Validez del presupuesto (días)<input id="n-validez" type="number" min="1" value="${n.validez}"></label>
+   <label class="f">Forma de pago<input id="n-pago" value="${esc(n.pago)}"></label>
+  </div>
+  <p class="small muted">Tip para la demo: escribí acá el nombre del negocio de la persona con la que estás hablando.</p>
+  </main>`+nav();
+}
+
+function sheet(html){const bg=document.createElement('div');bg.className='sheet-bg';bg.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  bg.addEventListener('click',e=>{if(e.target===bg||e.target.closest('[data-close]'))bg.remove()});document.body.appendChild(bg);return bg}
+
+function msgWA(p){const c=calc(p);return `Hola ${p.cli.split(' ')[0]||''}, te paso el presupuesto N.º ${String(p.n).padStart(4,'0')} de ${S.neg.nombre} por ${fmt(c.tot)}.\n\nLo podés ver y aceptar acá:\npresupuesta.ar/p/${(p.n*7919).toString(36)}\n\nCualquier duda me escribís.`}
+function hojaWA(p,txt,onSend){const bg=sheet(`<h2 style="margin:0">Mensaje para ${esc(p.cli||'el cliente')}</h2>
+  <div class="chat"><div class="bubble">${esc(txt)}</div></div>
+  <span class="small muted">En la versión real, este botón abre WhatsApp con el mensaje ya escrito. Vos solo tocás enviar.</span>
+  <button class="btn wa block" data-ok>Abrir WhatsApp y enviar</button><button class="btn ghost block" data-close>Cancelar</button>`);
+  bg.querySelector('[data-ok]').onclick=()=>{bg.remove();onSend()}}
+
+const views={lista:vLista,nuevo:vNuevo,detalle:vDetalle,cliente:vCliente,catalogo:vCatalogo,negocio:vNegocio};
+function render(){app.innerHTML=views[S.vista]();}
+
+app.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}
+  const v=e.target.closest('[data-ver]');if(v){go('detalle',{sel:+v.dataset.ver});return}
+  const q=e.target.closest('[data-q]');if(q){const b=S.borrador;const i=b.items[+q.dataset.q];i.q+= +q.dataset.d;if(i.q<1)b.items.splice(+q.dataset.q,1);render();return}
+  const fl=e.target.closest('[data-filtro]');if(fl){S.filtro=fl.dataset.filtro;render();return}
+  const a=e.target.closest('[data-act]');if(!a)return;const act=a.dataset.act;const p=S.pres.find(x=>x.n===S.sel);
+  if(act==='reset'){S=semilla();render();toast('Demo reiniciada')}
+  if(act==='agregar'){const bg=sheet(`<h2 style="margin:0">Mis precios</h2>${S.cat.map(c=>`<button class="row" data-add="${c.id}"><span class="who">${esc(c.nm)}</span><span class="amt">${fmt(c.p)}</span><span class="meta">por ${c.u}</span><span></span></button>`).join('')}<button class="btn ghost block" data-close>Listo</button>`);
+    bg.addEventListener('click',ev=>{const ad=ev.target.closest('[data-add]');if(!ad)return;const id=+ad.dataset.add;const ex=S.borrador.items.find(i=>i.id===id);ex?ex.q++:S.borrador.items.push({id,q:1});render();toast('Agregado: '+prod(id).nm)})}
+  if(act==='generar'){const b=S.borrador;if(!b.cli.trim()){toast('Falta el nombre del cliente');document.getElementById('cli')?.focus();return}if(!b.items.length){toast('Agregá al menos un ítem');return}
+    S.pres.unshift(b);S.borrador=null;go('detalle',{sel:b.n});toast('Presupuesto listo')}
+  if(act==='wa'&&p){hojaWA(p,p.est==='Borrador'?msgWA(p):`Hola ${p.cli.split(' ')[0]}, ¿pudiste ver el presupuesto N.º ${String(p.n).padStart(4,'0')}? Si querés lo ajustamos o te paso fechas para empezar.`,()=>{if(p.est==='Borrador'){p.est='Enviado';p.f=new Date(hoy)}render();toast('Enviado. Te avisamos cuando lo abra.')})}
+  if(act==='recordar'){const pend=S.pres.filter(x=>x.est==='Visto');const x=pend[0];hojaWA(x,`Hola ${x.cli.split(' ')[0]}, ¿pudiste ver el presupuesto N.º ${String(x.n).padStart(4,'0')}? Si querés lo ajustamos o te paso fechas para empezar.`,()=>toast('Recordatorio enviado a '+x.cli.split(' ')[0]))}
+  if(act==='cliente'&&p){if(p.est==='Enviado'||p.est==='Borrador'){if(p.est==='Borrador')p.est='Enviado';p.est='Visto';p.visto=new Date(hoy)}go('cliente')}
+  if(act==='aceptar'&&p){p.est='Aceptado';render();toast('¡Presupuesto aceptado!')}
+  if(act==='consultar'){toast('Abre WhatsApp con el comercio')}
+  if(act==='volver-comercio'){go('detalle');if(p&&p.est==='Aceptado')toast(p.cli.split(' ')[0]+' aceptó el presupuesto')}
+  if(act==='pdf'){toast('En la versión real se descarga el PDF')}
+  if(act==='aumentar'){const f=S.filtro||'Todos';const pct=S.pct??10;let k=0;S.cat.forEach(c=>{if(f==='Todos'||c.t===f){c.p=Math.round(c.p*(1+pct/100)/100)*100;k++}});render();toast(`Listo: ${k} precios actualizados`)}
+});
+app.addEventListener('input',e=>{const t=e.target;const b=S.borrador;
+  if(t.id==='cli')b.cli=t.value; if(t.id==='tel')b.tel=t.value;
+  if(t.id==='pct'){S.pct=Math.max(0,Math.min(100,+t.value||0))}
+  if(t.id.startsWith('n-')){const k=t.id.slice(2);S.neg[k]=k==='validez'?(+t.value||1):t.value;const lg=app.querySelectorAll('.logo');lg.forEach(l=>l.textContent=iniciales(S.neg.nombre))}
+});
+app.addEventListener('change',e=>{const t=e.target;
+  if(t.id==='desc'){S.borrador.desc=Math.max(0,Math.min(50,+t.value||0));render()}
+  if(t.id==='pct')render();
+});
+render();
+})();
+</script>
