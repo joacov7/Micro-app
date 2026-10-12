@@ -1,11 +1,16 @@
 import { render, screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
+import { Proveedores } from '@/proveedores'
 import { routes } from '@/router'
 
 function renderRuta(ruta: string) {
   const router = createMemoryRouter(routes, { initialEntries: [ruta] })
-  render(<RouterProvider router={router} />)
+  render(
+    <Proveedores>
+      <RouterProvider router={router} />
+    </Proveedores>,
+  )
 }
 
 describe('sitio público', () => {
@@ -14,7 +19,10 @@ describe('sitio público', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'No pierdas más trabajos por presupuestos sin respuesta',
     )
-    expect(screen.getByRole('link', { name: 'Quiero ser cliente fundador' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Crear cuenta gratis' })).toHaveAttribute(
+      'href',
+      '/registro',
+    )
   })
 
   it('muestra una página de error amable en rutas inexistentes', () => {

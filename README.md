@@ -14,13 +14,17 @@ Aplicación estática (Vite + React + TypeScript + Tailwind + shadcn/ui) servida
 
 ## Correrlo en una computadora
 
-Requisitos: Node.js 22 (ver `.nvmrc`).
+Requisitos: Node.js 22 y Docker (para la base de datos local).
 
 ```bash
 npm ci                # instala dependencias exactas
-cp .env.example .env.local   # completar cuando haya Supabase (incremento 2)
+npm run db:start      # levanta Supabase local (base, login y emails de prueba)
+npx supabase status -o env   # muestra API_URL y ANON_KEY para el paso siguiente
+cp .env.example .env.local   # completar VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
 npm run dev           # abre la app en http://localhost:5173
 ```
+
+Los emails (confirmación de cuenta, recuperar contraseña) no salen a internet en local: se ven en Mailpit, http://127.0.0.1:54324.
 
 ## Comandos
 
@@ -32,6 +36,9 @@ npm run dev           # abre la app en http://localhost:5173
 | `npm run test:e2e` | Pruebas de punta a punta en celular y escritorio (Playwright) |
 | `npm run format` | Ordena el formato del código |
 | `npm run build` | Genera el sitio estático en `dist/` |
+| `npm run db:reset` | Recrea la base local aplicando todas las migraciones |
+| `npm run db:test` | Pruebas de permisos y aislamiento de la base (pgTAP) |
+| `npm run db:types` | Regenera los tipos TypeScript de la base después de una migración |
 
 Si Playwright no puede descargar navegadores, se puede usar uno instalado con `PW_CHROMIUM_PATH=/ruta/a/chromium npm run test:e2e`.
 
@@ -45,6 +52,9 @@ src/
   site/            Sitio público
   ui/              Componentes compartidos (basados en shadcn/ui)
   lib/             Utilidades
+supabase/
+  migrations/      Cambios de la base de datos, en orden (nunca editar uno ya aplicado)
+  tests/           Pruebas de permisos (pgTAP)
 e2e/               Pruebas de punta a punta
 docs/              Documentación del negocio, arquitectura y operación
 validacion/        Material de validación comercial (no es parte de la app)
@@ -54,4 +64,5 @@ validacion/        Material de validación comercial (no es parte de la app)
 
 - Nunca subir claves: van en `.env.local` (local) o en los secretos de GitHub.
 - Todo cambio pasa por CI. Lo que no pasa `npm run check` no se fusiona.
+- Toda tabla nueva lleva Row Level Security y pruebas de aislamiento (lo verifica `supabase/tests/rls_obligatorio.test.sql`).
 - Cada dependencia nueva se registra en `docs/licencias.md` (solo MIT, Apache 2.0 o similares).

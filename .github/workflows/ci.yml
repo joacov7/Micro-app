@@ -29,11 +29,15 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+        env:
+          # Valores ficticios: el build no se conecta a Supabase.
+          VITE_SUPABASE_URL: http://127.0.0.1:54321
+          VITE_SUPABASE_ANON_KEY: clave-de-build
 
-  e2e:
-    name: Pruebas de punta a punta (celular y escritorio)
+  base-y-e2e:
+    name: Base de datos (permisos) y pruebas de punta a punta
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,6 +45,21 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Levantar Supabase local
+        run: npx supabase start
+      - name: Pruebas de permisos y aislamiento (pgTAP)
+        run: npx supabase test db
+      - name: Los tipos de la base están al día
+        run: |
+          npm run db:types
+          git diff --exit-code -- src/platform/database.types.ts || {
+            echo "::error::src/platform/database.types.ts está desactualizado. Corré npm run db:types y subí el cambio."
+            exit 1
+          }
+      - name: Configurar la app contra Supabase local
+        run: |
+          npx supabase status -o env | grep -E '^(API_URL|ANON_KEY)=' \
+            | sed 's/^API_URL=/VITE_SUPABASE_URL=/; s/^ANON_KEY=/VITE_SUPABASE_ANON_KEY=/; s/"//g' > .env.local
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4

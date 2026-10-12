@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { buttonVariants } from '@/ui/button-variants'
 
 const beneficios = [
@@ -30,7 +31,10 @@ export function HomePage() {
         >
           P
         </div>
-        <span className="font-display text-2xl font-semibold">Presupuestá</span>
+        <span className="font-display flex-1 text-2xl font-semibold">Presupuestá</span>
+        <Link to="/entrar" className={buttonVariants({ variant: 'borde' })}>
+          Entrar
+        </Link>
       </header>
 
       <main className="flex flex-1 flex-col gap-10 py-12">
@@ -46,9 +50,9 @@ export function HomePage() {
             seguí cada uno hasta que te digan que sí.
           </p>
           <div>
-            <a href="#fundadores" className={buttonVariants({ variant: 'accion' })}>
-              Quiero ser cliente fundador
-            </a>
+            <Link to="/registro" className={buttonVariants({ variant: 'accion' })}>
+              Crear cuenta gratis
+            </Link>
           </div>
         </section>
 
