@@ -47,11 +47,11 @@ Si algún dato está vacío, preguntalo antes de tomar decisiones que dependan d
 - Para cada servicio, indicar sus límites gratuitos y **a partir de qué volumen** habría que pagar. Ningún gasto se incorpora sin mi aprobación.
 - Diseñar para quedar cómodamente dentro de los límites gratuitos hasta tener ingresos que cubran el primer gasto.
 
-## 5. Stack de referencia (a confirmar en la fase 4)
+## 5. Stack (aprobado en D-14, ver `docs/04-arquitectura.md`)
 
-- Next.js con TypeScript.
-- PostgreSQL con autenticación administrada (Supabase o una alternativa gratuita equivalente).
-- Hosting gratuito que permita uso comercial.
+- Aplicación estática: Vite + React + TypeScript. Sin renderizado en servidor (no entra en los planes gratuitos).
+- Supabase: Postgres con Row Level Security, Auth, funciones SQL y Edge Functions solo para lo que requiera secretos.
+- Cloudflare Pages para servir los archivos estáticos.
 - Mercado Pago para cobrar en pesos.
 - Email transaccional con plan gratuito.
 - Componentes de interfaz: shadcn/ui con Tailwind.
@@ -102,7 +102,7 @@ El sistema debe operar con mínima intervención y sin depender de Claude Code p
 - Todo lo comercial se gestiona desde el panel de administración, sin tocar código: precios, planes, cupones, productos, activar o suspender clientes.
 - Cobros, renovaciones, reintentos, vencimiento de pruebas y suspensiones totalmente automáticos.
 - CI en GitHub: lint, typecheck, pruebas y build obligatorios antes de publicar.
-- Dependencias actualizadas automáticamente con Renovate o Dependabot. Las actualizaciones menores se aplican solas solo si pasan las pruebas.
+- Dependencias actualizadas automáticamente con Dependabot. Las actualizaciones menores se aplican solas solo si pasan las pruebas.
 - Monitoreo gratuito con alertas por email: errores de la aplicación, sitio caído y webhooks de pago fallidos.
 - Tareas programadas gratuitas, por ejemplo con GitHub Actions: conciliación de pagos, backups y lo necesario para que los servicios gratuitos no se pausen.
 - Runbooks en `docs/runbooks/`, escritos en lenguaje simple para alguien que no programa, para los incidentes más probables. Por ejemplo: "un cliente pagó y no tiene acceso", "el sitio no carga", "Mercado Pago no envía avisos", "restaurar un backup".
