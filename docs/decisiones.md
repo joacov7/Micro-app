@@ -74,3 +74,22 @@ Estados: **Pendiente** (necesita aprobación) · **Aprobada** · **Rechazada**.
 - **Fecha:** 2026-10-11
 - **Estado:** Pendiente
 - **Pregunta abierta:** ¿qué es Agent Core y tiene relación con este proyecto? Si no, se elimina la mención de `CLAUDE.md`.
+
+## D-13 — Desarrollar en paralelo con la validación
+- **Fecha:** 2026-10-12
+- **Estado:** Aprobada el 2026-10-12 (pedido explícito)
+- **Decisión:** arrancar el desarrollo sin esperar el resultado de las 6 semanas de validación. Modifica D-02.
+- **Riesgo aceptado:** invertir tiempo en algo que quizás no se pague. Mitigación: los incrementos 1 y 2 (esqueleto y plataforma) se reutilizan si se cambia a Órdenes de trabajo; al terminar la validación se revisa el plan.
+
+## D-14 — Vite + React estático en lugar de Next.js
+- **Fecha:** 2026-10-12
+- **Estado:** Pendiente
+- **Recomendación:** aplicación estática (Vite + React + TypeScript) en Cloudflare Pages, con la lógica y la seguridad en Supabase (RLS y funciones SQL). Modifica `CLAUDE.md` §5.
+- **Alternativas:** Next.js en Cloudflare Workers (el plan gratuito permite 10 ms de CPU por solicitud y el renderizado en servidor suele superarlo); Next.js en Netlify (300 créditos al mes, el sitio se pausa al agotarlos).
+- **Motivo:** es la única opción que entra en planes gratuitos con uso comercial sin riesgo de cortes. Ver `docs/04-arquitectura.md` §1.
+
+## D-15 — Repositorio privado
+- **Fecha:** 2026-10-12
+- **Estado:** Pendiente
+- **Recomendación:** pasar `joacov7/Micro-app` a privado antes de subir código. Hoy es público.
+- **Motivo:** expone la estrategia y el código a competidores, y los backups no pueden guardarse en un repositorio público. GitHub Free da 2.000 minutos de Actions por mes en privados.
