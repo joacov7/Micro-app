@@ -46,7 +46,7 @@ Cloudflare Pages                └─ Edge Functions (solo lo que necesite secr
 | PDF | jsPDF + jspdf-autotable | MIT | Se genera en el dispositivo del usuario: costo cero de servidor |
 | Base, auth, funciones | Supabase (Postgres 15+) | Apache 2.0 (cliente) | Plan gratuito suficiente; RLS |
 | Pruebas | Vitest, Playwright, pgTAP | MIT / Apache 2.0 / PostgreSQL | Unidad, punta a punta y permisos en la base |
-| Calidad | ESLint, Prettier | MIT | Estilo consistente |
+| Calidad | Oxlint, Prettier | MIT | Oxlint es el linter que trae la plantilla oficial de Vite |
 | Dependencias | Dependabot | Servicio integrado de GitHub | Actualizaciones automáticas, sin servicios extra |
 | Errores | Sentry SDK | MIT (SDK) | Plan gratuito |
 | Email | Brevo (D-08) | — | 300 por día gratis |

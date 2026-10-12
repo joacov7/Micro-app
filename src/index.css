@@ -1,0 +1,123 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens de diseño (docs/03-diseno.md §5).
+ * Nombres compatibles con shadcn/ui para poder sumar componentes con su CLI.
+ * Tema claro en :root; oscuro según el sistema o forzado con data-theme="dark".
+ */
+:root {
+  --background: #f7f8fa;
+  --foreground: #16233a;
+  --card: #ffffff;
+  --card-foreground: #16233a;
+  --muted: #eef1f5;
+  --muted-foreground: #5b6678;
+  --border: #d5dae1;
+  --input: #d5dae1;
+  --ring: #f2b705;
+  /* Marca: tinta de plano técnico */
+  --primary: #1f3a5f;
+  --primary-foreground: #ffffff;
+  /* Acción principal: amarillo de obra (una por pantalla) */
+  --accent: #f2b705;
+  --accent-foreground: #1b1600;
+  --destructive: #a3282b;
+  --destructive-foreground: #ffffff;
+  /* Estados de presupuesto */
+  --estado-enviado: #2457a6;
+  --estado-visto: #8a5a00;
+  --estado-aceptado: #1e7b4a;
+  --estado-rechazado: #a3282b;
+  --radius: 0.625rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --background: #121b2a;
+    --foreground: #e7ecf3;
+    --card: #1a2536;
+    --card-foreground: #e7ecf3;
+    --muted: #223047;
+    --muted-foreground: #9aa6b8;
+    --border: #2c3a50;
+    --input: #2c3a50;
+    --primary: #8db3e8;
+    --primary-foreground: #0d1420;
+    --destructive: #f08a8c;
+    --destructive-foreground: #0d1420;
+    --estado-enviado: #93b6f0;
+    --estado-visto: #f2c65a;
+    --estado-aceptado: #6fd39c;
+    --estado-rechazado: #f08a8c;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --background: #121b2a;
+  --foreground: #e7ecf3;
+  --card: #1a2536;
+  --card-foreground: #e7ecf3;
+  --muted: #223047;
+  --muted-foreground: #9aa6b8;
+  --border: #2c3a50;
+  --input: #2c3a50;
+  --primary: #8db3e8;
+  --primary-foreground: #0d1420;
+  --destructive: #f08a8c;
+  --destructive-foreground: #0d1420;
+  --estado-enviado: #93b6f0;
+  --estado-visto: #f2c65a;
+  --estado-aceptado: #6fd39c;
+  --estado-rechazado: #f08a8c;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-estado-enviado: var(--estado-enviado);
+  --color-estado-visto: var(--estado-visto);
+  --color-estado-aceptado: var(--estado-aceptado);
+  --color-estado-rechazado: var(--estado-rechazado);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-sans: 'Barlow', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    @apply outline-ring outline-3 outline-offset-2;
+  }
+}

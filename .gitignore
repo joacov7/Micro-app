@@ -1,2 +1,32 @@
+# Dependencias y builds
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+
+# Entorno: nunca subir claves (ver .env.example)
+.env
+.env.*
+!.env.example
+
+# Pruebas
+coverage
+playwright-report
+test-results
+blob-report
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.log
+
+# Datos personales de la validación (ver validacion/README.md)
 validacion/*-completa.xlsx
 ~$*.xlsx

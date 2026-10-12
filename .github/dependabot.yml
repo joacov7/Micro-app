@@ -1,0 +1,22 @@
+# Actualizaciones automáticas de dependencias (CLAUDE.md §9).
+# Las menores y parches se aprueban solas si pasa CI (ver workflows/dependabot-automerge.yml).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '06:00'
+      timezone: America/Argentina/Buenos_Aires
+    open-pull-requests-limit: 5
+    groups:
+      menores:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      acciones:
+        patterns: ['*']
