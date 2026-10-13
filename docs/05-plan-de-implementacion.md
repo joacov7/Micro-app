@@ -20,7 +20,7 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 
 **Se verifica:** el checklist del runbook completo. **No bloquea** los incrementos 1 a 3, que funcionan en local y en CI.
 
-## Incremento 1 — Esqueleto y CI
+## Incremento 1 — Esqueleto y CI ✅ (2026-10-12)
 
 - Proyecto Vite + React + TypeScript, Tailwind, shadcn/ui con los tokens de `03-diseno.md`.
 - ESLint, Prettier, Vitest, Playwright.
@@ -31,7 +31,7 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 
 **Se verifica:** CI verde con una prueba de ejemplo; build genera archivos estáticos.
 
-## Incremento 2 — Base de plataforma y acceso
+## Incremento 2 — Base de plataforma y acceso ✅ (2026-10-12)
 
 - Migraciones: organizaciones, membresías, perfiles, apps, planes, permisos, suscripciones, pagos, uso, auditoría.
 - RLS en todas las tablas y función `entitlement()`.
@@ -40,11 +40,13 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 
 **Se verifica:** pruebas de aislamiento verdes; un usuario no ve datos de otra organización.
 
-## Incremento 3 — Mis precios, clientes y mi negocio
+## Incremento 3 — Mis precios, clientes y mi negocio ✅ (2026-10-13)
 
-- Tablas `pres_items`, `pres_clientes` con RLS y pruebas.
-- Pantallas: Mis precios (alta, edición, baja), Clientes, Mi negocio.
-- Ítems de ejemplo por rubro al crear el negocio.
+- Tablas `pres_items`, `pres_clientes` y `pres_ajustes` con RLS, topes por negocio y pruebas.
+- Pantallas: Mis precios (alta, edición, quitar, búsqueda y filtro), Clientes, Mi negocio.
+- Ítems de ejemplo por rubro: se cargan con un botón en la lista vacía (no automáticamente al crear el negocio, para que la plataforma no dependa de la app).
+- Navegación del panel declarada por la app (`src/apps/presupuestos/manifiesto.tsx`), lista para copiar en la segunda app.
+- **Pendiente:** subir el logo del negocio. Es una función del plan Pro y requiere almacenamiento de archivos; pasa al incremento 7.
 
 ## Incremento 4 — Presupuestos y PDF
 

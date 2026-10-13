@@ -2,8 +2,11 @@
  * Contrato de plataforma para las micro-apps (docs/04-arquitectura.md §3).
  * Las apps usan SOLO estas funciones; nunca leen tablas de la plataforma ni de otras apps.
  */
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSesion } from './sesion-contexto'
+
+export { RUBROS, negocioEsquema, type Negocio } from './esquemas'
+export { traducirError } from './errores'
 import { supabase } from './supabase'
 
 export type Organizacion = {
@@ -52,5 +55,20 @@ export function usePermiso(orgId: string | undefined, clave: string) {
       if (error) throw error
       return data
     },
+  })
+}
+
+/** Actualiza los datos del negocio. La base exige que quien lo hace sea el dueño. */
+export function useActualizarOrganizacion() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (datos: { id: string; nombre: string; rubro: string; telefono: string }) => {
+      const { error } = await supabase()
+        .from('organizations')
+        .update({ nombre: datos.nombre, rubro: datos.rubro, telefono: datos.telefono || null })
+        .eq('id', datos.id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['organizacion-actual'] }),
   })
 }

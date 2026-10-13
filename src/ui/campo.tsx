@@ -67,3 +67,7 @@ export function Aviso({
     </div>
   )
 }
+
+export function Textarea({ className, ...props }: ComponentProps<'textarea'>) {
+  return <textarea className={cn(claseControl, 'min-h-20 py-2', className)} {...props} />
+}

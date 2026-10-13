@@ -74,7 +74,7 @@ Administración (solo administradores de la plataforma)
 ## 3. Flujos principales
 
 **Alta y primer resultado (meta: menos de 5 minutos).**
-Registro con email y contraseña → confirmar email → "¿Cómo se llama tu negocio?" y rubro → se precargan 5 ítems de ejemplo del rubro (editables) → "Hacé tu primer presupuesto" → PDF y link listos.
+Registro con email y contraseña → confirmar email → "¿Cómo se llama tu negocio?" y rubro → la lista de precios vacía ofrece cargar ítems de ejemplo del rubro (editables) → "Hacé tu primer presupuesto" → PDF y link listos.
 
 **Presupuesto.**
 Nuevo → cliente (elegir o crear) → agregar ítems de mis precios o escribir uno libre → cantidades y descuento → Generar → Detalle → Enviar por WhatsApp (abre WhatsApp con el mensaje y el link; el estado pasa a Enviado).

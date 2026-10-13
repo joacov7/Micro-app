@@ -267,6 +267,126 @@ export type Database = {
           },
         ]
       }
+      pres_ajustes: {
+        Row: {
+          forma_pago: string | null
+          notas_pie: string | null
+          org_id: string
+          updated_at: string
+          validez_dias: number
+        }
+        ComputedFields: never
+        Insert: {
+          forma_pago?: string | null
+          notas_pie?: string | null
+          org_id: string
+          updated_at?: string
+          validez_dias?: number
+        }
+        Update: {
+          forma_pago?: string | null
+          notas_pie?: string | null
+          org_id?: string
+          updated_at?: string
+          validez_dias?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_ajustes_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: true
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      pres_clientes: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          nombre: string
+          notas: string | null
+          org_id: string
+          telefono: string | null
+          updated_at: string
+        }
+        ComputedFields: never
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          nombre: string
+          notas?: string | null
+          org_id: string
+          telefono?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          nombre?: string
+          notas?: string | null
+          org_id?: string
+          telefono?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_clientes_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      pres_items: {
+        Row: {
+          activo: boolean
+          categoria: string
+          created_at: string
+          id: string
+          nombre: string
+          org_id: string
+          precio: number
+          unidad: string
+          updated_at: string
+        }
+        ComputedFields: never
+        Insert: {
+          activo?: boolean
+          categoria?: string
+          created_at?: string
+          id?: string
+          nombre: string
+          org_id: string
+          precio?: number
+          unidad?: string
+          updated_at?: string
+        }
+        Update: {
+          activo?: boolean
+          categoria?: string
+          created_at?: string
+          id?: string
+          nombre?: string
+          org_id?: string
+          precio?: number
+          unidad?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_items_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -419,6 +539,7 @@ export type Database = {
       es_admin_plataforma: { Args: Record<PropertyKey, never>; Returns: boolean }
       es_miembro: { Args: { p_org: string }; Returns: boolean }
       es_owner: { Args: { p_org: string }; Returns: boolean }
+      pres_cargar_ejemplos: { Args: { p_org: string }; Returns: number }
     }
     Enums: {
       estado_app: 'publicada' | 'oculta' | 'retirada'

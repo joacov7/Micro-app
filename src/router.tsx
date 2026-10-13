@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router'
+import { navegacionPresupuestos, rutasPresupuestos } from '@/apps/presupuestos/manifiesto'
 import { AreaPrivada } from '@/platform/pages/AreaPrivada'
 import { EntrarPage } from '@/platform/pages/EntrarPage'
-import { InicioAppPage } from '@/platform/pages/InicioAppPage'
+import { LayoutApp } from '@/platform/pages/LayoutApp'
 import { NuevaClavePage } from '@/platform/pages/NuevaClavePage'
 import { RecuperarPage } from '@/platform/pages/RecuperarPage'
 import { RegistroPage } from '@/platform/pages/RegistroPage'
@@ -18,7 +19,12 @@ export const routes = [
   {
     path: '/app',
     element: <AreaPrivada />,
-    children: [{ index: true, element: <InicioAppPage /> }],
+    children: [
+      {
+        element: <LayoutApp navegacion={navegacionPresupuestos} />,
+        children: rutasPresupuestos,
+      },
+    ],
   },
   { path: '*', element: <NotFoundPage /> },
 ]

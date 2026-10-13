@@ -1,31 +1,5 @@
-import { expect, test, type Page } from '@playwright/test'
-
-// Requiere Supabase local (npx supabase start). Los emails se leen desde Mailpit.
-const MAILPIT = process.env.MAILPIT_URL ?? 'http://127.0.0.1:54324'
-
-async function linkDelUltimoEmail(para: string, asunto: RegExp): Promise<string> {
-  for (let intento = 0; intento < 30; intento++) {
-    const r = await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:${para}`)}`)
-    const { messages } = (await r.json()) as { messages: Array<{ ID: string; Subject: string }> }
-    const msg = messages.find((m) => asunto.test(m.Subject))
-    if (msg) {
-      const detalle = (await (await fetch(`${MAILPIT}/api/v1/message/${msg.ID}`)).json()) as {
-        HTML: string
-      }
-      const link = /href="([^"]+\/auth\/v1\/verify[^"]+)"/.exec(detalle.HTML)?.[1]
-      if (link) return link.replaceAll('&amp;', '&')
-    }
-    await new Promise((res) => setTimeout(res, 500))
-  }
-  throw new Error(`No llegó el email "${asunto}" a ${para}`)
-}
-
-async function entrar(page: Page, email: string, contrasena: string) {
-  await page.goto('/entrar')
-  await page.getByLabel('Email').fill(email)
-  await page.getByLabel('Contraseña').fill(contrasena)
-  await page.getByRole('button', { name: 'Entrar' }).click()
-}
+import { expect, test } from '@playwright/test'
+import { emailUnico, entrar, linkDelUltimoEmail } from './ayudas.ts'
 
 test('el panel exige iniciar sesión', async ({ page }) => {
   await page.goto('/app')
@@ -36,7 +10,7 @@ test('el panel exige iniciar sesión', async ({ page }) => {
 test('registro, confirmación, alta del negocio y recuperación de contraseña', async ({
   page,
 }, info) => {
-  const email = `prueba-${info.project.name}-${Date.now()}@ejemplo.test`
+  const email = emailUnico(info)
 
   // 1. Registro
   await page.goto('/registro')
@@ -59,9 +33,9 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await page.getByLabel('Nombre del negocio').fill('Electricidad Prueba')
   await page.getByLabel('Rubro').selectOption('Electricista')
   await page.getByRole('button', { name: 'Empezar' }).click()
-  await expect(page.getByRole('heading', { name: '¡Tu negocio está listo!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
   await expect(page.getByText('Plan Gratis: hasta 5 presupuestos por mes.')).toBeVisible()
-  await expect(page.getByText('Electricidad Prueba')).toBeVisible()
+  await expect(page.getByRole('banner')).toContainText('Electricidad Prueba')
 
   // 4. Sale y vuelve a entrar
   await page.getByRole('button', { name: 'Salir' }).click()
@@ -69,7 +43,7 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await entrar(page, email, 'equivocada1')
   await expect(page.getByRole('alert')).toContainText('El email o la contraseña no son correctos.')
   await entrar(page, email, 'obra2026')
-  await expect(page.getByRole('heading', { name: '¡Tu negocio está listo!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
   await page.getByRole('button', { name: 'Salir' }).click()
 
   // 5. Recupera la contraseña
@@ -82,12 +56,12 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await page.getByLabel('Contraseña nueva').fill('nueva2026')
   await page.getByLabel('Repetila').fill('nueva2026')
   await page.getByRole('button', { name: 'Guardar contraseña' }).click()
-  await expect(page.getByRole('heading', { name: '¡Tu negocio está listo!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
 
   // 6. La contraseña vieja ya no sirve; la nueva sí
   await page.getByRole('button', { name: 'Salir' }).click()
   await entrar(page, email, 'obra2026')
   await expect(page.getByRole('alert')).toBeVisible()
   await entrar(page, email, 'nueva2026')
-  await expect(page.getByRole('heading', { name: '¡Tu negocio está listo!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
 })
