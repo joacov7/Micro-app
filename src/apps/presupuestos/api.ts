@@ -5,6 +5,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/platform/supabase'
 import type { AjustesDatos, ClienteDatos, ItemDatos } from './esquemas'
+import type { EstadoPresupuesto, LineaPresupuesto, Presupuesto } from './tipos'
 
 export type Item = ItemDatos & { id: string }
 export type Cliente = {
@@ -173,5 +174,112 @@ export function useGuardarAjustes(orgId: string) {
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: claves.ajustes(orgId) }),
+  })
+}
+
+// ---------------------------------------------------------------- Presupuestos
+export type ResumenPresupuesto = Pick<
+  Presupuesto,
+  'id' | 'numero' | 'estado' | 'cliente_nombre' | 'total' | 'created_at' | 'enviado_el' | 'visto_el'
+>
+
+const clavePresupuestos = (org: string) => ['pres', org, 'presupuestos'] as const
+const clavePresupuesto = (org: string, id: string) => ['pres', org, 'presupuestos', id] as const
+
+export function usePresupuestos(orgId: string) {
+  return useQuery({
+    queryKey: clavePresupuestos(orgId),
+    queryFn: async (): Promise<ResumenPresupuesto[]> => {
+      const { data, error } = await supabase()
+        .from('pres_presupuestos')
+        .select('id, numero, estado, cliente_nombre, total, created_at, enviado_el, visto_el')
+        .eq('org_id', orgId)
+        .order('numero', { ascending: false })
+        .limit(200)
+      if (error) throw error
+      return data.map((p) => ({ ...p, estado: p.estado as EstadoPresupuesto }))
+    },
+  })
+}
+
+export function usePresupuesto(orgId: string, id: string | undefined) {
+  return useQuery({
+    queryKey: clavePresupuesto(orgId, id ?? ''),
+    enabled: !!id,
+    queryFn: async (): Promise<Presupuesto | null> => {
+      const { data, error } = await supabase()
+        .from('pres_presupuestos')
+        .select(
+          `id, numero, estado, cliente_id, cliente_nombre, cliente_telefono, descuento_pct, subtotal,
+           descuento, total, validez_dias, forma_pago, notas, created_at, enviado_el, visto_el,
+           items:pres_presupuesto_items (id, orden, item_id, descripcion, unidad, cantidad, precio_unitario)`,
+        )
+        .eq('org_id', orgId)
+        .eq('id', id!)
+        .order('orden', { referencedTable: 'pres_presupuesto_items' })
+        .maybeSingle()
+      if (error) throw error
+      if (!data) return null
+      return { ...data, estado: data.estado as EstadoPresupuesto }
+    },
+  })
+}
+
+export type DatosPresupuesto = {
+  id?: string
+  cliente_id: string | null
+  cliente_nombre: string
+  cliente_telefono: string
+  guardar_cliente: boolean
+  descuento_pct: number
+  validez_dias: number
+  forma_pago: string
+  notas: string
+  items: LineaPresupuesto[]
+}
+
+/** Guarda encabezado e ítems en una sola operación (todo o nada). Devuelve el id. */
+export function useGuardarPresupuesto(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: DatosPresupuesto): Promise<string> => {
+      const { data, error } = await supabase().rpc('pres_guardar_presupuesto', {
+        p_org: orgId,
+        // La función acepta null en p_id y p_cliente_id; los tipos generados no lo reflejan.
+        p_id: (d.id ?? null) as unknown as string,
+        p_cliente_id: d.cliente_id as unknown as string,
+        p_cliente_nombre: d.cliente_nombre,
+        p_cliente_telefono: d.cliente_telefono,
+        p_guardar_cliente: d.guardar_cliente,
+        p_descuento_pct: d.descuento_pct,
+        p_validez_dias: d.validez_dias,
+        p_forma_pago: d.forma_pago,
+        p_notas: d.notas,
+        p_items: d.items.map((i) => ({
+          item_id: i.item_id,
+          descripcion: i.descripcion,
+          unidad: i.unidad,
+          cantidad: i.cantidad,
+          precio_unitario: i.precio_unitario,
+        })),
+      })
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: clavePresupuestos(orgId) })
+      qc.invalidateQueries({ queryKey: claves.clientes(orgId) })
+    },
+  })
+}
+
+export function useBorrarPresupuesto(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase().from('pres_presupuestos').delete().eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: clavePresupuestos(orgId) }),
   })
 }

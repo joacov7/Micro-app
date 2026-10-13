@@ -3,7 +3,13 @@
 Regla (`CLAUDE.md` §10): solo MIT, Apache 2.0 o similares. Nada de AGPL, Elastic, BSL ni código propietario.
 Actualizar esta tabla cada vez que se agrega o quita una dependencia directa.
 
-Última revisión: 2026-10-12 (incremento 2). Las dependencias de producción, incluidas las indirectas, se verificaron con `npx license-checker-rseidelsohn --production --summary`: 24 MIT, 1 Apache 2.0 y 1 0BSD (permisiva, equivalente a dominio público).
+Última revisión: 2026-10-13 (incremento 4). Dependencias de producción, incluidas las indirectas (`npx license-checker-rseidelsohn --production --summary`): 45 MIT, 1 Apache 2.0, 1 0BSD y tres casos revisados a mano:
+
+- `dompurify`: doble licencia MPL-2.0 **o** Apache-2.0. Se usa bajo Apache-2.0.
+- `pako`: MIT y Zlib, ambas permisivas.
+- `rgbcolor`: el verificador la marca como "MIT*" porque la deduce del archivo; el archivo LICENSE.md es MIT.
+
+Todas vienen de jsPDF, que se carga solo al descargar un PDF.
 
 ## Dependencias directas
 
@@ -25,6 +31,8 @@ Actualizar esta tabla cada vez que se agrega o quita una dependencia directa.
 | class-variance-authority | 0.7.1 | Apache-2.0 | App |
 | clsx | 2.1.1 | MIT | App |
 | jsdom | 29.1.1 | MIT | Desarrollo |
+| jspdf | 4.2.1 | MIT | App |
+| jspdf-autotable | 5.0.8 | MIT | App |
 | oxlint | 1.87.0 | MIT | Desarrollo |
 | prettier | 3.9.10 | MIT | Desarrollo |
 | prettier-plugin-tailwindcss | 0.8.1 | MIT | Desarrollo |

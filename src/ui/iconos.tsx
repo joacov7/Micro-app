@@ -35,3 +35,9 @@ export const IconoNegocio = (p: SVGProps<SVGSVGElement>) => (
     <path d="M4 9l1-5h14l1 5M4 9h16v11H4zM9 20v-6h6v6" />
   </svg>
 )
+export const IconoNuevo = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <path d="M12 8v8M8 12h8" />
+  </svg>
+)

@@ -99,7 +99,7 @@ test('edita los datos del negocio y las condiciones', async ({ page }, info) => 
   await crearCuentaConNegocio(page, info)
   await page
     .getByRole('navigation', { name: 'Secciones' })
-    .getByRole('link', { name: 'Mi negocio' })
+    .getByRole('link', { name: 'Negocio' })
     .click()
 
   await page.getByLabel('Nombre del negocio').fill('Electricidad Romero')
@@ -120,7 +120,7 @@ test('edita los datos del negocio y las condiciones', async ({ page }, info) => 
   // El inicio refleja el paso completado
   await page
     .getByRole('navigation', { name: 'Secciones' })
-    .getByRole('link', { name: 'Inicio' })
+    .getByRole('link', { name: 'Presupuestos' })
     .click()
   await expect(
     page.getByRole('link', { name: /Completá los datos de tu negocio \(hecho\)/ }),

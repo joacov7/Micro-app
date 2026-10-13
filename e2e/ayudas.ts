@@ -48,6 +48,6 @@ export async function crearCuentaConNegocio(
   await page.getByLabel('Nombre del negocio').fill(negocio.nombre)
   await page.getByLabel('Rubro').selectOption(negocio.rubro)
   await page.getByRole('button', { name: 'Empezar' }).click()
-  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
   return { email, contrasena: 'obra2026' }
 }

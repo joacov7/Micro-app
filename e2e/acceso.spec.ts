@@ -33,7 +33,7 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await page.getByLabel('Nombre del negocio').fill('Electricidad Prueba')
   await page.getByLabel('Rubro').selectOption('Electricista')
   await page.getByRole('button', { name: 'Empezar' }).click()
-  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
   await expect(page.getByText('Plan Gratis: hasta 5 presupuestos por mes.')).toBeVisible()
   await expect(page.getByRole('banner')).toContainText('Electricidad Prueba')
 
@@ -43,7 +43,7 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await entrar(page, email, 'equivocada1')
   await expect(page.getByRole('alert')).toContainText('El email o la contraseña no son correctos.')
   await entrar(page, email, 'obra2026')
-  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
   await page.getByRole('button', { name: 'Salir' }).click()
 
   // 5. Recupera la contraseña
@@ -56,12 +56,12 @@ test('registro, confirmación, alta del negocio y recuperación de contraseña',
   await page.getByLabel('Contraseña nueva').fill('nueva2026')
   await page.getByLabel('Repetila').fill('nueva2026')
   await page.getByRole('button', { name: 'Guardar contraseña' }).click()
-  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
 
   // 6. La contraseña vieja ya no sirve; la nueva sí
   await page.getByRole('button', { name: 'Salir' }).click()
   await entrar(page, email, 'obra2026')
   await expect(page.getByRole('alert')).toBeVisible()
   await entrar(page, email, 'nueva2026')
-  await expect(page.getByRole('heading', { name: 'Hola' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
 })

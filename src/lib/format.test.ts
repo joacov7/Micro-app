@@ -5,8 +5,9 @@ import { formatARS } from './format'
 const normalizar = (s: string) => s.replace(/ /g, ' ')
 
 describe('formatARS', () => {
-  it('usa punto para miles y coma para decimales', () => {
-    expect(normalizar(formatARS(1234567.5))).toBe('$ 1.234.567,5')
+  it('usa punto para miles y coma con dos decimales para los centavos', () => {
+    expect(normalizar(formatARS(1234567.5))).toBe('$ 1.234.567,50')
+    expect(normalizar(formatARS(0.07))).toBe('$ 0,07')
   })
 
   it('no muestra decimales en montos enteros', () => {

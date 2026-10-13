@@ -48,12 +48,13 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 - Navegación del panel declarada por la app (`src/apps/presupuestos/manifiesto.tsx`), lista para copiar en la segunda app.
 - **Pendiente:** subir el logo del negocio. Es una función del plan Pro y requiere almacenamiento de archivos; pasa al incremento 7.
 
-## Incremento 4 — Presupuestos y PDF
+## Incremento 4 — Presupuestos y PDF ✅ (2026-10-13)
 
 - Tablas de presupuestos, ítems, contador; trigger de totales; numeración sin repetir.
 - Pantallas: nuevo presupuesto, detalle, lista e inicio con montos.
 - PDF generado en el dispositivo.
 - Pruebas de cálculo (unidad) y de totales en la base.
+- Hecho: guardado atómico (encabezado + ítems), solo se editan y borran borradores, clientes e ítems de otro negocio rechazados por la base, PDF en el dispositivo (D-16), 31 pruebas de base nuevas y prueba de punta a punta con descarga del PDF.
 
 ## Incremento 5 — Link para el cliente y seguimiento
 

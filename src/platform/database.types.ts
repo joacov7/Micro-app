@@ -342,6 +342,30 @@ export type Database = {
           },
         ]
       }
+      pres_contador: {
+        Row: {
+          org_id: string
+          ultimo: number
+        }
+        ComputedFields: never
+        Insert: {
+          org_id: string
+          ultimo?: number
+        }
+        Update: {
+          org_id?: string
+          ultimo?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_contador_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: true
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       pres_items: {
         Row: {
           activo: boolean
@@ -380,6 +404,156 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'pres_items_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      pres_presupuesto_items: {
+        Row: {
+          cantidad: number
+          descripcion: string
+          id: string
+          item_id: string | null
+          orden: number
+          org_id: string
+          precio_unitario: number
+          presupuesto_id: string
+          unidad: string
+        }
+        ComputedFields: never
+        Insert: {
+          cantidad: number
+          descripcion: string
+          id?: string
+          item_id?: string | null
+          orden?: number
+          org_id: string
+          precio_unitario: number
+          presupuesto_id: string
+          unidad?: string
+        }
+        Update: {
+          cantidad?: number
+          descripcion?: string
+          id?: string
+          item_id?: string | null
+          orden?: number
+          org_id?: string
+          precio_unitario?: number
+          presupuesto_id?: string
+          unidad?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_presupuesto_items_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'pres_items'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'pres_presupuesto_items_org_id_fkey'
+            columns: ['org_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'pres_presupuesto_items_presupuesto_id_fkey'
+            columns: ['presupuesto_id']
+            isOneToOne: false
+            referencedRelation: 'pres_presupuestos'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      pres_presupuestos: {
+        Row: {
+          cliente_id: string | null
+          cliente_nombre: string
+          cliente_telefono: string | null
+          created_at: string
+          created_by: string | null
+          descuento: number
+          descuento_pct: number
+          enviado_el: string | null
+          estado: string
+          forma_pago: string | null
+          id: string
+          motivo_rechazo: string | null
+          notas: string | null
+          numero: number
+          org_id: string
+          respondido_el: string | null
+          subtotal: number
+          token_publico: string
+          total: number
+          updated_at: string
+          validez_dias: number
+          visto_el: string | null
+        }
+        ComputedFields: never
+        Insert: {
+          cliente_id?: string | null
+          cliente_nombre: string
+          cliente_telefono?: string | null
+          created_at?: string
+          created_by?: string | null
+          descuento?: number
+          descuento_pct?: number
+          enviado_el?: string | null
+          estado?: string
+          forma_pago?: string | null
+          id?: string
+          motivo_rechazo?: string | null
+          notas?: string | null
+          numero: number
+          org_id: string
+          respondido_el?: string | null
+          subtotal?: number
+          token_publico?: string
+          total?: number
+          updated_at?: string
+          validez_dias?: number
+          visto_el?: string | null
+        }
+        Update: {
+          cliente_id?: string | null
+          cliente_nombre?: string
+          cliente_telefono?: string | null
+          created_at?: string
+          created_by?: string | null
+          descuento?: number
+          descuento_pct?: number
+          enviado_el?: string | null
+          estado?: string
+          forma_pago?: string | null
+          id?: string
+          motivo_rechazo?: string | null
+          notas?: string | null
+          numero?: number
+          org_id?: string
+          respondido_el?: string | null
+          subtotal?: number
+          token_publico?: string
+          total?: number
+          updated_at?: string
+          validez_dias?: number
+          visto_el?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pres_presupuestos_cliente_id_fkey'
+            columns: ['cliente_id']
+            isOneToOne: false
+            referencedRelation: 'pres_clientes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'pres_presupuestos_org_id_fkey'
             columns: ['org_id']
             isOneToOne: false
             referencedRelation: 'organizations'
@@ -540,6 +714,22 @@ export type Database = {
       es_miembro: { Args: { p_org: string }; Returns: boolean }
       es_owner: { Args: { p_org: string }; Returns: boolean }
       pres_cargar_ejemplos: { Args: { p_org: string }; Returns: number }
+      pres_guardar_presupuesto: {
+        Args: {
+          p_cliente_id: string
+          p_cliente_nombre: string
+          p_cliente_telefono: string
+          p_descuento_pct: number
+          p_forma_pago: string
+          p_guardar_cliente: boolean
+          p_id: string
+          p_items: Json
+          p_notas: string
+          p_org: string
+          p_validez_dias: number
+        }
+        Returns: string
+      }
     }
     Enums: {
       estado_app: 'publicada' | 'oculta' | 'retirada'

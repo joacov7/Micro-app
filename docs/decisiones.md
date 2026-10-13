@@ -93,3 +93,10 @@ Estados: **Pendiente** (necesita aprobación) · **Aprobada** · **Rechazada**.
 - **Estado:** Aprobada el 2026-10-12
 - **Recomendación:** pasar `joacov7/Micro-app` a privado antes de subir código. Hoy es público.
 - **Motivo:** expone la estrategia y el código a competidores, y los backups no pueden guardarse en un repositorio público. GitHub Free da 2.000 minutos de Actions por mes en privados.
+
+## D-16 — Invoify: tomar ideas, no código; PDF en el dispositivo con jsPDF
+- **Fecha:** 2026-10-13
+- **Estado:** Aprobada el 2026-10-13 (se aprobó evaluarlo; esta es la conclusión de la evaluación)
+- **Evaluación:** [Invoify](https://github.com/al1abb/invoify) tiene licencia MIT (verificada en su archivo LICENSE, último cambio 24/08/2026). Genera el PDF en un servidor con Puppeteer (Chromium) a partir de plantillas HTML de Next.js.
+- **Decisión:** no copiar código. Su forma de generar el PDF requiere un servidor, que no tenemos ni entra en los planes gratuitos (D-14). Se tomaron solo ideas de diseño del documento (encabezado, cliente, tabla de detalle, totales, condiciones).
+- **Alternativa elegida:** jsPDF + jspdf-autotable (MIT), que generan el PDF en el celular o la computadora del usuario. Se cargan solo al tocar "Descargar PDF".
