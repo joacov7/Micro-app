@@ -83,11 +83,10 @@ test('arma, guarda, descarga, edita y borra presupuestos', async ({ page }, info
   await page.getByRole('button', { name: 'Guardar', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'N.º 0002' })).toBeVisible()
 
-  // Inicio: lista y total del mes
+  // Inicio: lista
   await nav.getByRole('link', { name: 'Presupuestos' }).click()
   const lista = page.getByRole('list', { name: 'Tus presupuestos' })
   await expect(lista.getByRole('link')).toHaveCount(2)
-  await expect(page.getByText('$ 199.751,50')).toBeVisible()
 
   // Borrar un borrador
   await lista.getByRole('link', { name: /N\.º 0002/ }).click()

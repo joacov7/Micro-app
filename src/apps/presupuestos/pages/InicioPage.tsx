@@ -7,6 +7,7 @@ import { Aviso } from '@/ui/campo'
 import { useItems, usePresupuestos } from '../api'
 import { numeroPresupuesto } from '../calculos'
 import { EtiquetaEstado } from '../componentes'
+import { haceCuanto, necesitanSeguimiento } from '../seguimiento'
 
 const fecha = (d: string) =>
   new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' })
@@ -19,11 +20,15 @@ export function InicioPage() {
   const presupuestos = usePresupuestos(orgId)
 
   const [ahora] = useState(() => new Date())
-  const delMes = (presupuestos.data ?? []).filter((p) => {
+  const lista = presupuestos.data ?? []
+  const enJuego = lista.filter((p) => p.estado === 'enviado' || p.estado === 'visto')
+  const aceptadosMes = lista.filter((p) => {
+    if (p.estado !== 'aceptado') return false
     const d = new Date(p.created_at)
     return d.getMonth() === ahora.getMonth() && d.getFullYear() === ahora.getFullYear()
   })
-  const montoDelMes = delMes.reduce((s, p) => s + p.total, 0)
+  const suma = (ps: typeof lista) => ps.reduce((s, p) => s + p.total, 0)
+  const pendientes = necesitanSeguimiento(lista, ahora)
 
   const plan =
     limite.data === undefined
@@ -59,23 +64,52 @@ export function InicioPage() {
         </Link>
       </div>
 
+      {pendientes.length > 0 && (
+        <section
+          aria-labelledby="seguimiento"
+          className="border-estado-visto/40 bg-estado-visto/10 flex flex-col gap-2 rounded-lg border p-4"
+        >
+          <h2 id="seguimiento" className="font-display text-estado-visto text-xl font-semibold">
+            {pendientes.length === 1
+              ? '1 cliente vio tu presupuesto y no contestó'
+              : `${pendientes.length} clientes vieron tu presupuesto y no contestaron`}
+          </h2>
+          <p className="text-sm">Es el mejor momento para escribirles.</p>
+          <ul className="flex flex-col gap-1">
+            {pendientes.map((p) => (
+              <li key={p.id}>
+                <Link to={`/app/presupuestos/${p.id}`} className="font-semibold underline">
+                  {p.cliente_nombre} · N.º {numeroPresupuesto(p.numero)}
+                </Link>{' '}
+                <span className="text-muted-foreground text-sm">
+                  (lo vio {haceCuanto(p.visto_el!, ahora)})
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-card rounded-lg border p-4">
           <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-            Este mes
+            En juego
           </p>
-          <p className="font-display text-2xl font-bold">{formatARS(montoDelMes)}</p>
-          <p className="text-muted-foreground text-sm">
-            {delMes.length} {delMes.length === 1 ? 'presupuesto' : 'presupuestos'}
-          </p>
+          <p className="font-display text-2xl font-bold">{formatARS(suma(enJuego))}</p>
+          <p className="text-muted-foreground text-sm">{enJuego.length} esperando respuesta</p>
         </div>
         <div className="bg-card rounded-lg border p-4">
           <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-            Tu plan
+            Aceptados este mes
           </p>
-          <p className="mt-1 text-sm">{plan}</p>
+          <p className="font-display text-2xl font-bold">{formatARS(suma(aceptadosMes))}</p>
+          <p className="text-muted-foreground text-sm">
+            {aceptadosMes.length} {aceptadosMes.length === 1 ? 'presupuesto' : 'presupuestos'}
+          </p>
         </div>
       </div>
+
+      <p className="text-muted-foreground text-sm">{plan}</p>
 
       {faltanPasos && (
         <section aria-labelledby="primeros-pasos" className="flex flex-col gap-2">

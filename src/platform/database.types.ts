@@ -494,8 +494,9 @@ export type Database = {
           updated_at: string
           validez_dias: number
           visto_el: string | null
+          pres_vence_el: string | null
         }
-        ComputedFields: never
+        ComputedFields: 'pres_vence_el'
         Insert: {
           cliente_id?: string | null
           cliente_nombre: string
@@ -685,6 +686,10 @@ export type Database = {
     Functions: {
       _entitlement: { Args: { p_clave: string; p_org: string }; Returns: number }
       _exigir_admin: { Args: Record<PropertyKey, never>; Returns: undefined }
+      _pres_cambiar_estado: {
+        Args: { p_estado: string; p_extra?: Json; p_id: string }
+        Returns: undefined
+      }
       _registrar_uso: { Args: { p_clave: string; p_org: string }; Returns: number }
       admin_activar_plan: {
         Args: { p_org: string; p_plan: string; p_vence_el: string }
@@ -714,6 +719,7 @@ export type Database = {
       es_miembro: { Args: { p_org: string }; Returns: boolean }
       es_owner: { Args: { p_org: string }; Returns: boolean }
       pres_cargar_ejemplos: { Args: { p_org: string }; Returns: number }
+      pres_duplicar: { Args: { p_actualizar_precios?: boolean; p_id: string }; Returns: string }
       pres_guardar_presupuesto: {
         Args: {
           p_cliente_id: string
@@ -730,6 +736,26 @@ export type Database = {
         }
         Returns: string
       }
+      pres_marcar_enviado: { Args: { p_id: string }; Returns: string }
+      pres_marcar_respuesta: {
+        Args: { p_id: string; p_motivo?: string; p_respuesta: string }
+        Returns: string
+      }
+      pres_responder_presupuesto: {
+        Args: { p_motivo?: string; p_respuesta: string; p_token: string }
+        Returns: string
+      }
+      pres_vence_el: {
+        Args: {
+          p: Omit<
+            Database['public']['Tables']['pres_presupuestos']['Row'],
+            Database['public']['Tables']['pres_presupuestos']['ComputedFields']
+          >
+        }
+        Returns: string
+      }
+      pres_vencer_presupuestos: { Args: Record<PropertyKey, never>; Returns: number }
+      pres_ver_presupuesto: { Args: { p_token: string }; Returns: Json }
     }
     Enums: {
       estado_app: 'publicada' | 'oculta' | 'retirada'

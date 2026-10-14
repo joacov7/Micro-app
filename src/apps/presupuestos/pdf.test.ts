@@ -19,6 +19,8 @@ const presupuesto: Presupuesto = {
   created_at: '2026-10-14T12:00:00Z',
   enviado_el: null,
   visto_el: null,
+  respondido_el: null,
+  motivo_rechazo: null,
   items: [
     {
       item_id: null,

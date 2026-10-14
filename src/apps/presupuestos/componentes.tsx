@@ -2,7 +2,13 @@ import { formatARS } from '@/lib/format'
 import { iniciales } from '@/lib/texto'
 import { cn } from '@/lib/utils'
 import { importeLinea, numeroPresupuesto, venceEl } from './calculos'
-import { ETIQUETA_ESTADO, type Emisor, type EstadoPresupuesto, type Presupuesto } from './tipos'
+import {
+  ETIQUETA_ESTADO,
+  fechaBaseValidez,
+  type DatosDocumento,
+  type Emisor,
+  type EstadoPresupuesto,
+} from './tipos'
 
 const fecha = (d: Date | string) =>
   new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -35,7 +41,7 @@ export function EtiquetaEstado({ estado }: { estado: EstadoPresupuesto }) {
  * El presupuesto como documento en papel. Se usa en el detalle y (incremento 5) en la página
  * que ve el cliente. Colores fijos de papel: se ve igual en tema claro y oscuro, como el PDF.
  */
-export function Documento({ p, emisor }: { p: Presupuesto; emisor: Emisor }) {
+export function Documento({ p, emisor }: { p: DatosDocumento; emisor: Emisor }) {
   return (
     <article
       aria-label={`Presupuesto N.º ${numeroPresupuesto(p.numero)}`}
@@ -117,7 +123,7 @@ export function Documento({ p, emisor }: { p: Presupuesto; emisor: Emisor }) {
       <div className="flex flex-col gap-1 border-t border-[#dadde3] pt-3 text-xs text-[#5b6678]">
         <p>
           Validez: {p.validez_dias} días (hasta el{' '}
-          {fecha(venceEl(new Date(p.created_at), p.validez_dias))}).
+          {fecha(venceEl(fechaBaseValidez(p), p.validez_dias))}).
         </p>
         {p.forma_pago && <p>Forma de pago: {p.forma_pago}</p>}
         {p.notas && <p>Observaciones: {p.notas}</p>}

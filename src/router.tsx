@@ -1,5 +1,9 @@
 import { createBrowserRouter } from 'react-router'
-import { navegacionPresupuestos, rutasPresupuestos } from '@/apps/presupuestos/manifiesto'
+import {
+  navegacionPresupuestos,
+  rutasPresupuestos,
+  rutasPublicasPresupuestos,
+} from '@/apps/presupuestos/manifiesto'
 import { AreaPrivada } from '@/platform/pages/AreaPrivada'
 import { EntrarPage } from '@/platform/pages/EntrarPage'
 import { LayoutApp } from '@/platform/pages/LayoutApp'
@@ -26,6 +30,7 @@ export const routes = [
       },
     ],
   },
+  ...rutasPublicasPresupuestos,
   { path: '*', element: <NotFoundPage /> },
 ]
 

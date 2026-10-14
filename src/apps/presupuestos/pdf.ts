@@ -6,7 +6,7 @@ import type { jsPDF } from 'jspdf'
 import { formatARS } from '@/lib/format'
 import { iniciales } from '@/lib/texto'
 import { importeLinea, numeroPresupuesto, venceEl } from './calculos'
-import type { Emisor, Presupuesto } from './tipos'
+import { fechaBaseValidez, type DatosDocumento, type Emisor } from './tipos'
 
 const TINTA: [number, number, number] = [22, 35, 58]
 const MARCA: [number, number, number] = [31, 58, 95]
@@ -17,7 +17,7 @@ const cantidad = (n: number) =>
   new Intl.NumberFormat('es-AR', { maximumFractionDigits: 3 }).format(n)
 
 export async function armarPdf(
-  p: Presupuesto,
+  p: DatosDocumento,
   emisor: Emisor,
   opciones: { conMarca: boolean },
 ): Promise<jsPDF> {
@@ -139,7 +139,7 @@ export async function armarPdf(
   // Condiciones
   y += 4
   const condiciones = [
-    `Validez: ${p.validez_dias} días (hasta el ${fecha(venceEl(emitido, p.validez_dias))}).`,
+    `Validez: ${p.validez_dias} días (hasta el ${fecha(venceEl(fechaBaseValidez(p), p.validez_dias))}).`,
     p.forma_pago && `Forma de pago: ${p.forma_pago}`,
     p.notas && `Observaciones: ${p.notas}`,
     emisor.notas_pie,
@@ -168,7 +168,7 @@ export async function armarPdf(
   return doc
 }
 
-export function nombreArchivo(p: Pick<Presupuesto, 'numero' | 'cliente_nombre'>): string {
+export function nombreArchivo(p: Pick<DatosDocumento, 'numero' | 'cliente_nombre'>): string {
   const cliente = p.cliente_nombre
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -178,7 +178,7 @@ export function nombreArchivo(p: Pick<Presupuesto, 'numero' | 'cliente_nombre'>)
 }
 
 export async function descargarPdf(
-  p: Presupuesto,
+  p: DatosDocumento,
   emisor: Emisor,
   opciones: { conMarca: boolean },
 ) {

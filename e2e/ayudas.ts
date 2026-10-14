@@ -51,3 +51,21 @@ export async function crearCuentaConNegocio(
   await expect(page.getByRole('heading', { name: 'Presupuestos', level: 1 })).toBeVisible()
   return { email, contrasena: 'obra2026' }
 }
+
+/** Arma y guarda un presupuesto con un ítem libre. Deja abierta la página del detalle. */
+export async function crearPresupuesto(
+  page: Page,
+  datos: { cliente: string; telefono?: string; item: string; precio: string },
+) {
+  await page
+    .getByRole('navigation', { name: 'Secciones' })
+    .getByRole('link', { name: 'Nuevo' })
+    .click()
+  await page.getByLabel('Nombre del cliente').fill(datos.cliente)
+  if (datos.telefono) await page.getByLabel('WhatsApp del cliente (opcional)').fill(datos.telefono)
+  await page.getByRole('button', { name: '+ Ítem libre' }).click()
+  await page.getByLabel('Ítem 1', { exact: true }).fill(datos.item)
+  await page.getByLabel('Precio por u. ($)').fill(datos.precio)
+  await page.getByRole('button', { name: 'Guardar', exact: true }).click()
+  await expect(page.getByRole('heading', { name: /^N\.º \d{4}$/ })).toBeVisible()
+}

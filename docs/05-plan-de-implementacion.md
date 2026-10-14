@@ -56,7 +56,7 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 - Pruebas de cálculo (unidad) y de totales en la base.
 - Hecho: guardado atómico (encabezado + ítems), solo se editan y borran borradores, clientes e ítems de otro negocio rechazados por la base, PDF en el dispositivo (D-16), 31 pruebas de base nuevas y prueba de punta a punta con descarga del PDF.
 
-## Incremento 5 — Link para el cliente y seguimiento
+## Incremento 5 — Link para el cliente y seguimiento ✅ (2026-10-14)
 
 - Funciones públicas `ver_presupuesto` y `responder_presupuesto`.
 - Página `/p/:token` con aceptar y rechazar.
@@ -64,6 +64,9 @@ Necesita tu cuenta y tus datos, así que no lo puedo hacer yo. Te doy los pasos 
 - Avisos de seguimiento y vencimiento diario.
 
 **Hito:** acá la app ya sirve para usarla con clientes fundadores en el entorno de pruebas.
+
+- Hecho, además de lo previsto: el cliente puede descargar el PDF desde el link; el negocio puede registrar una respuesta recibida por teléfono; "Duplicar con precios actuales"; vencimiento diario con `pg_cron` y también al abrir el link. 30 pruebas de base nuevas (126 en total) y 8 de punta a punta.
+- **Pasa al incremento 7:** limitar "saber cuándo lo vio" y los avisos de seguimiento al plan Pro. Por ahora los ven todos los planes.
 
 ## Incremento 6 — Aumento masivo de precios
 

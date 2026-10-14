@@ -27,6 +27,8 @@ export type Presupuesto = {
   created_at: string
   enviado_el: string | null
   visto_el: string | null
+  respondido_el: string | null
+  motivo_rechazo: string | null
   items: LineaPresupuesto[]
 }
 
@@ -46,3 +48,30 @@ export const ETIQUETA_ESTADO: Record<EstadoPresupuesto, string> = {
   rechazado: 'Rechazado',
   vencido: 'Vencido',
 }
+
+/** Lo necesario para mostrar o imprimir un presupuesto (lo usa también la vista pública). */
+export type DatosDocumento = Pick<
+  Presupuesto,
+  | 'numero'
+  | 'cliente_nombre'
+  | 'cliente_telefono'
+  | 'descuento_pct'
+  | 'subtotal'
+  | 'descuento'
+  | 'total'
+  | 'validez_dias'
+  | 'forma_pago'
+  | 'notas'
+  | 'created_at'
+  | 'enviado_el'
+> & {
+  items: Array<
+    Pick<LineaPresupuesto, 'descripcion' | 'unidad' | 'cantidad' | 'precio_unitario'> & {
+      id?: string
+    }
+  >
+}
+
+/** La validez corre desde el envío (o desde la creación si todavía no se envió), como en la base. */
+export const fechaBaseValidez = (p: Pick<Presupuesto, 'enviado_el' | 'created_at'>) =>
+  new Date(p.enviado_el ?? p.created_at)

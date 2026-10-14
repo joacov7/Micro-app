@@ -5,7 +5,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/platform/supabase'
 import type { AjustesDatos, ClienteDatos, ItemDatos } from './esquemas'
-import type { EstadoPresupuesto, LineaPresupuesto, Presupuesto } from './tipos'
+import type { Emisor, EstadoPresupuesto, LineaPresupuesto, Presupuesto } from './tipos'
 
 export type Item = ItemDatos & { id: string }
 export type Cliente = {
@@ -212,6 +212,7 @@ export function usePresupuesto(orgId: string, id: string | undefined) {
         .select(
           `id, numero, estado, cliente_id, cliente_nombre, cliente_telefono, descuento_pct, subtotal,
            descuento, total, validez_dias, forma_pago, notas, created_at, enviado_el, visto_el,
+           respondido_el, motivo_rechazo,
            items:pres_presupuesto_items (id, orden, item_id, descripcion, unidad, cantidad, precio_unitario)`,
         )
         .eq('org_id', orgId)
@@ -281,5 +282,108 @@ export function useBorrarPresupuesto(orgId: string) {
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: clavePresupuestos(orgId) }),
+  })
+}
+
+// ---------------------------------------------------------------- Envío y respuesta
+const invalidarPresupuestos = (qc: ReturnType<typeof useQueryClient>, orgId: string) =>
+  qc.invalidateQueries({ queryKey: clavePresupuestos(orgId) })
+
+/** Marca el presupuesto como enviado (si era borrador) y devuelve el código del link. */
+export function useMarcarEnviado(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data, error } = await supabase().rpc('pres_marcar_enviado', { p_id: id })
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => invalidarPresupuestos(qc, orgId),
+  })
+}
+
+export function useMarcarRespuesta(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: { id: string; respuesta: 'aceptar' | 'rechazar' }) => {
+      const { error } = await supabase().rpc('pres_marcar_respuesta', {
+        p_id: d.id,
+        p_respuesta: d.respuesta,
+      })
+      if (error) throw error
+    },
+    onSuccess: () => invalidarPresupuestos(qc, orgId),
+  })
+}
+
+export function useDuplicarPresupuesto(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data, error } = await supabase().rpc('pres_duplicar', {
+        p_id: id,
+        p_actualizar_precios: true,
+      })
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => invalidarPresupuestos(qc, orgId),
+  })
+}
+
+export function useTokenPublico(orgId: string, id: string, habilitado: boolean) {
+  return useQuery({
+    queryKey: ['pres', orgId, 'token', id],
+    enabled: habilitado,
+    staleTime: Infinity,
+    queryFn: async () => {
+      const { data, error } = await supabase()
+        .from('pres_presupuestos')
+        .select('token_publico')
+        .eq('id', id)
+        .single()
+      if (error) throw error
+      return data.token_publico
+    },
+  })
+}
+
+// ---------------------------------------------------------------- Vista pública (sin cuenta)
+export type VistaPublica = {
+  presupuesto: Omit<Presupuesto, 'id' | 'cliente_id'> & {
+    vence_el: string
+    respondido_el: string | null
+  }
+  emisor: Emisor
+  con_marca: boolean
+  es_del_negocio: boolean
+}
+
+export function useVistaPublica(token: string | undefined) {
+  return useQuery({
+    queryKey: ['pres-publico', token],
+    enabled: !!token,
+    retry: false,
+    queryFn: async (): Promise<VistaPublica | null> => {
+      const { data, error } = await supabase().rpc('pres_ver_presupuesto', { p_token: token! })
+      if (error) throw error
+      return (data as VistaPublica | null) ?? null
+    },
+  })
+}
+
+export function useResponderPublico(token: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (d: { respuesta: 'aceptar' | 'rechazar'; motivo?: string }) => {
+      const { data, error } = await supabase().rpc('pres_responder_presupuesto', {
+        p_token: token,
+        p_respuesta: d.respuesta,
+        p_motivo: d.motivo ?? '',
+      })
+      if (error) throw error
+      return data as 'aceptado' | 'rechazado' | 'vencido'
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['pres-publico', token] }),
   })
 }

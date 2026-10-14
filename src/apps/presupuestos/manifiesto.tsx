@@ -11,6 +11,7 @@ import { EditorPresupuestoPage } from './pages/EditorPresupuestoPage'
 import { InicioPage } from './pages/InicioPage'
 import { NegocioPage } from './pages/NegocioPage'
 import { PreciosPage } from './pages/PreciosPage'
+import { PresupuestoPublicoPage } from './pages/PresupuestoPublicoPage'
 
 export const rutasPresupuestos: RouteObject[] = [
   { index: true, element: <InicioPage /> },
@@ -28,4 +29,9 @@ export const navegacionPresupuestos: ItemNavegacion[] = [
   { a: '/app/precios', etiqueta: 'Precios', Icono: IconoPrecios },
   { a: '/app/clientes', etiqueta: 'Clientes', Icono: IconoClientes },
   { a: '/app/negocio', etiqueta: 'Negocio', Icono: IconoNegocio },
+]
+
+/** Páginas públicas de la app (sin cuenta): el presupuesto que recibe el cliente. */
+export const rutasPublicasPresupuestos: RouteObject[] = [
+  { path: '/p/:token', element: <PresupuestoPublicoPage /> },
 ]
